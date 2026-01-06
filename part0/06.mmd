@@ -4,7 +4,7 @@ sequenceDiagram
 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     activate server
-    Note right of browser: Sends only one request POST to add new note to new)note_space address
+    Note right of browser: Sends only one request POST to add new note to new_note_spa address
     server-->>browser: 201 response {"message":"note created"} 
     deactivate server
 
