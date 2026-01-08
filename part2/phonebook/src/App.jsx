@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
+import Notification  from './components/notification'
 
 const Person = ({person, onDelete}) => {
   return <li>{person.name} {person.number} <button onClick={onDelete}>delete</button></li>
@@ -42,6 +43,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
@@ -62,9 +65,14 @@ const App = () => {
             setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
             setNewName('')
             setNewNumber('')
+            setIsError(false)
+            setNotificationMessage(`${returnedPerson.name}'s number changed`)
+            setTimeout(() => {setNotificationMessage(null)}, 4000)
           })
           .catch(() => {
-            alert(`Information of ${newName} has already been removed from server`)
+            setIsError(true)
+            setNotificationMessage(`Information of ${newName} has already been removed from server`)
+            // alert(`Information of ${newName} has already been removed from server`)
             setPersons(persons.filter(p => p.id !== person.id))
           })
       }
@@ -77,6 +85,9 @@ const App = () => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
+            setIsError(false)
+            setNotificationMessage(`Added ${returnedPerson.name}`)
+            setTimeout(() => {setNotificationMessage(null)}, 4000)
         })
     }
   }
@@ -91,7 +102,9 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== id))
       })
       .catch(() => {
-        alert(`Information of ${person.name} has already been removed from server`)
+        setIsError(true)
+        setNotificationMessage(`Information of ${person.name} has already been removed from server`)
+        // alert(`Information of ${person.name} has already been removed from server`)
         setPersons(persons.filter(p => p.id !== id))
       })
   }
@@ -110,7 +123,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={notificationMessage} isError={isError} />
       <Filter searchName={searchName} handleSearchChange={handleSearchChange} />
       <h3>Add a new</h3>
       <PersonForm 
