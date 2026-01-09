@@ -5,7 +5,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
-
+app.use(express.static('dist'))
 // Custom morgan token to log POST body
 morgan.token('body', (req) => {
   if (req.method === 'POST') {
