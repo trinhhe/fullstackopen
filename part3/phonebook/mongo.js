@@ -39,11 +39,11 @@ if (process.argv[3] && process.argv[4]) {
     mongoose.connection.close()
   })
 } else {
-    Person.find({}).then(result => {
-        console.log('phonebook')
-        result.forEach(person => {
-            console.log(person.name, person.number)
-        })
-        mongoose.connection.close()
+  Person.find({}).then(result => {
+    console.log('phonebook')
+    result.forEach(person => {
+      console.log(person.name, person.number)
     })
+    mongoose.connection.close()
+  })
 }
