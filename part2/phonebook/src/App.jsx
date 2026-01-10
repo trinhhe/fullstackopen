@@ -89,6 +89,12 @@ const App = () => {
             setNotificationMessage(`Added ${returnedPerson.name}`)
             setTimeout(() => {setNotificationMessage(null)}, 4000)
         })
+        .catch(error => {
+          // console.log(error.response.data.error)
+          setNotificationMessage(error.response.data.error)
+          setIsError(true)
+          setTimeout(() => {setNotificationMessage(null)}, 4000)
+        })
     }
   }
 
