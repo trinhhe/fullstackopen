@@ -1,6 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
 // const cors = require('cors')
+require('dotenv').config()
+const Person = require('./models/person')
+
 const app = express()
 
 app.use(express.json())
@@ -44,7 +47,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  // response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -74,7 +80,7 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {  
     const body = request.body
-    console.log(body)
+    // console.log(body)
     if (!body.name || !body.number) {
         return response.status(400).json({ 
             error: 'name or number is missing' 
@@ -91,12 +97,12 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
         id: generateId(),
     }
-    
+    console.log(person)
     persons = persons.concat(person)
     response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
